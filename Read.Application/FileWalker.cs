@@ -9,7 +9,6 @@ namespace Read.Application
     public interface IFileWalker<T>
     {
         IList<PathResult<T>> Walk(Func<string, T> fileFunc);
-        Task<IList<PathResult<T>>> WalkAsync(Func<string, T> fileFunc);
     }
 
     public class FileWalker<T> : IFileWalker<T>
@@ -32,12 +31,6 @@ namespace Read.Application
         public IList<PathResult<T>> Walk(Func<string, T> fileFunc)
         {
             return _walkRecursive ? WalkRecursively(fileFunc) : WalkOnlyCurrentDir(fileFunc);
-        }
-
-        public Task<IList<PathResult<T>>> WalkAsync(Func<string, T> fileFunc)
-        {
-            // TODO
-            return null;
         }
 
         private IList<PathResult<T>> WalkOnlyCurrentDir(Func<string, T> fileFunc)
