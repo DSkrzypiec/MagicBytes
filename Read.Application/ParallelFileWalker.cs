@@ -22,7 +22,7 @@ namespace Read.Application
         public void WalkInParallel(Action<string> fileFunc)
         {
             var options = new ParallelOptions();
-            options.MaxDegreeOfParallelism = 15;
+            options.MaxDegreeOfParallelism = 8;
 
             var paths = FilePaths();
 

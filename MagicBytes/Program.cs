@@ -15,18 +15,16 @@ namespace magicBytes
             Action<string> fileFunc = (string path) =>
                 Console.WriteLine(reader.ReadBytes(path).ToString());
 
+            /* -- parallel version:
             var parallelWalker = new ParallelFileWalker(path);
             parallelWalker.WalkInParallel(fileFunc);
-
-            /* -- sync version:
-            var walker = new FileWalker<FileBytes>(path, true);
-            var results = walker.Walk(fileFunc);
-
-            foreach (var entry in results)
-            {
-                Console.WriteLine(entry.Result.ToString());
-            }
             */
+
+            ///* -- sync version:
+            var walker = new FileWalker(path, true);
+            walker.Walk(fileFunc);
+
+            //*/
 
             return 0;
         }

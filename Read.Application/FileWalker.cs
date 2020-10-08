@@ -6,12 +6,12 @@ using Read.Domain;
 
 namespace Read.Application
 {
-    public interface IFileWalker<T>
+    public interface IFileWalker
     {
-        IList<PathResult<T>> Walk(Func<string, T> fileFunc);
+        void Walk(Action<string> fileFunc);
     }
 
-    public class FileWalker<T> : IFileWalker<T>
+    public class FileWalker : IFileWalker
     {
         private readonly string _rootDirPath;
         private readonly bool _walkRecursive = false;
@@ -28,57 +28,69 @@ namespace Read.Application
         }
 
 
-        public IList<PathResult<T>> Walk(Func<string, T> fileFunc)
+        public void Walk(Action<string> fileFunc)
         {
-            return _walkRecursive ? WalkRecursively(fileFunc) : WalkOnlyCurrentDir(fileFunc);
+            if (_walkRecursive)
+                WalkRecursively(fileFunc);
+            else
+                WalkOnlyCurrentDir(fileFunc);
         }
 
-        private IList<PathResult<T>> WalkOnlyCurrentDir(Func<string, T> fileFunc)
+        private void WalkOnlyCurrentDir(Action<string> fileFunc)
         {
-            var results = new List<PathResult<T>>();
-            AddFilesResults(_rootDirPath, fileFunc, results);
-
-            return results;
+            HandleFilesResults(_rootDirPath, fileFunc);
         }
 
-        private IList<PathResult<T>> WalkRecursively(Func<string, T> fileFunc)
+        private void WalkRecursively(Action<string> fileFunc)
         {
-            var results = new List<PathResult<T>>();
-            WalkRec(_rootDirPath, fileFunc, results);
-
-            return results;
+            WalkRec(_rootDirPath, fileFunc);
         }
 
-        private void WalkRec(string dirPath, Func<string, T> fileFunc, IList<PathResult<T>> results)
+        private void WalkRec(string dirPath, Action<string> fileFunc)
         {
-            AddFilesResults(dirPath, fileFunc, results);
+            HandleFilesResults(dirPath, fileFunc);
 
-            foreach (var dir in Directory.GetDirectories(dirPath))
+            string[] directories = new string[] {};
+
+            try
             {
-                WalkRec(dir, fileFunc, results);
+                directories = Directory.GetDirectories(dirPath);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Expection while getting directories from [{dirPath}]: {ex.Message}");
+            }
+
+            foreach (var dir in directories)
+            {
+                WalkRec(dir, fileFunc);
             }
         }
 
-        private void AddFilesResults(string dirPath, Func<string, T> fileFunc, IList<PathResult<T>> results)
+        private void HandleFilesResults(string dirPath, Action<string> fileFunc)
         {
-            var filesWithinDir = Directory.GetFiles(dirPath);
+            string[] filesWithinDir = new string[] {};
+
+            try
+            {
+                filesWithinDir = Directory.GetFiles(dirPath);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Expection while getting files from [{dirPath}]: {ex.Message}");
+            }
 
             foreach (var filePath in filesWithinDir)
             {
-                T result;
-
                 try
                 {
-                    result = fileFunc(filePath);
+                    fileFunc(filePath);
                 }
                 catch (Exception ex)
                 {
-                    // TODO
-                    Console.WriteLine($"Expection while fileFunc({filePath}): {ex.Message}");
+                    Console.WriteLine($"Expection while [{filePath}]: {ex.Message}");
                     continue;
                 }
-
-                results.Add(new PathResult<T>{ Path = filePath, Result = result });
             }
         }
     }
