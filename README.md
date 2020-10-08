@@ -37,8 +37,8 @@ For now result is printed on the standard out in form of `fullPath: [magic bytes
 
 ## TODO
 
-1. [] Pass results on the fly (don't accumulate all results in a `List<T>`)
-1. [] Implement concurrent version
+1. [x] Pass results on the fly (don't accumulate all results in a `List<T>`)
+1. [] Implement concurrent version (Update 2020-10-08: so far concurrent versions (more than 1) are slower then synchronus version)
 1. [] Setup a few flags (for recursive traverse, output format, concurrency and so on...)
 1. [] Write built-in mini help
-1. [] Test on Windows
+1. [x] Test on Windows
