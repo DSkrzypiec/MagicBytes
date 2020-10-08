@@ -1,7 +1,5 @@
 ﻿using System;
 using System.IO;
-using System.Threading.Tasks;
-using System.Threading.Channels;
 using Read.Domain;
 using Read.Application;
 
@@ -9,24 +7,16 @@ namespace magicBytes
 {
     class Program
     {
-        static async Task<int> Main(string[] args)
+        static int Main(string[] args)
         {
             var path = args[0];
             var reader = new BytesReader(8);
 
-            Func<string, FileBytes> fileFunc = (string path) => reader.ReadBytes(path);
-            Channel<FileBytes> byteChannel = Channel.CreateUnbounded<FileBytes>();
+            Action<string> fileFunc = (string path) =>
+                Console.WriteLine(reader.ReadBytes(path).ToString());
 
-            var walkerAsync = new FileWalkerAsync<FileBytes>(path, byteChannel);
-            await walkerAsync.WalkAsync(fileFunc);
-
-            var printer = Task.Run(async () =>
-            {
-                while (await byteChannel.Reader.WaitToReadAsync())
-                    Console.WriteLine(await byteChannel.Reader.ReadAsync());
-            });
-
-            await Task.WhenAll(printer);
+            var parallelWalker = new ParallelFileWalker(path);
+            parallelWalker.WalkInParallel(fileFunc);
 
             /* -- sync version:
             var walker = new FileWalker<FileBytes>(path, true);

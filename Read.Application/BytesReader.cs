@@ -8,7 +8,6 @@ namespace Read.Application
     public interface IBytesReader
     {
         FileBytes ReadBytes(string path);
-        Task<FileBytes> ReadBytesAsync(string path);
     }
 
     public class BytesReader : IBytesReader
@@ -40,12 +39,6 @@ namespace Read.Application
             var res = new FileBytes(path, bytes);
 
             return res;
-        }
-
-        public /*async*/ Task<FileBytes> ReadBytesAsync(string path)
-        {
-            // TODO
-            return null;
         }
     }
 }
