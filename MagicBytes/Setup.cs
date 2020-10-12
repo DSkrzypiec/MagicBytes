@@ -17,19 +17,27 @@ namespace MagicBytes
 
             var attr = File.GetAttributes(options.Path);
             if (!attr.HasFlag(FileAttributes.Directory)) {
-                RunForSingleFile(bytesReader, options.Path);
+                RunForSingleFile(bytesReader, options);
                 return;
             }
 
             var fileWalker = new FileWalker(options.Path, options.Recursive);
-            var runner = new Runner(bytesReader, fileWalker);
+
+            var runner = new Runner(
+                bytesReader,
+                fileWalker,
+                options.Separator,
+                options.BytesSeparator);
 
             runner.Run();
         }
 
-        private static void RunForSingleFile(IBytesReader bytesReader, string path)
+        private static void RunForSingleFile(IBytesReader bytesReader, CmdOptions options)
         {
-            Console.WriteLine(bytesReader.ReadBytes(path).ToString());
+            Console.WriteLine(
+                bytesReader
+                    .ReadBytes(options.Path)
+                    .Format(options.Separator, options.BytesSeparator));
         }
     }
 }

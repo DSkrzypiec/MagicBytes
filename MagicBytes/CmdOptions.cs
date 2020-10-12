@@ -19,6 +19,14 @@ namespace MagicBytes
                 HelpText = "Number of first bytes to be read", Default = 8)]
         public int NumberOfBytes { get; set; }
 
+        [Option('s', "separator", Required = false, Default = ": ",
+                HelpText = "Separator in output between file path and sequence of bytes")]
+        public string Separator { get; set; }
+
+        [Option('b', "byte_separator", Required = false, Default = " ",
+                HelpText = "Separator between bytes in byte sequence")]
+        public string BytesSeparator { get; set; }
+
 
         [Usage(ApplicationAlias = "magicBytes")]
         public static IEnumerable<Example> Examples

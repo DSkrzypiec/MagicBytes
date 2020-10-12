@@ -6,7 +6,7 @@ namespace Read.Domain
 {
     public class FileBytes
     {
-        private const int _byteLimitToPrint = 50;
+        private const int _byteLimitToPrint = 1024;
 
         private string _filePath;
         private IList<byte> _bytes;
@@ -17,16 +17,16 @@ namespace Read.Domain
             _bytes = bytes.ToList();
         }
 
-        public override string ToString()
+        public string Format(string separator, string bytesSeperator)
         {
             if (_bytes.Count > _byteLimitToPrint)
             {
                 return $"Too many bytes for {_filePath}, limit is {_byteLimitToPrint}";
             }
 
-            string bytesInHex = BitConverter.ToString(_bytes.ToArray()).Replace("-", " ");
+            string bytesInHex = BitConverter.ToString(_bytes.ToArray()).Replace("-", bytesSeperator);
 
-            return $"{_filePath}: [{bytesInHex}]";
+            return $"{_filePath}{separator}{bytesInHex}";
         }
     }
 }

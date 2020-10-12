@@ -12,7 +12,7 @@ namespace MagicBytes
 
     public class CmdOptionsValidator : IValidator
     {
-        private const int MaxNumberOfBytes = 50;
+        private const int MaxNumberOfBytes = 1024;
         private readonly CmdOptions _options;
 
         public CmdOptionsValidator(CmdOptions options)
