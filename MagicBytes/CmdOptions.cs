@@ -26,7 +26,14 @@ namespace MagicBytes
             get
             {
                 return new List<Example>() {
-                    new Example("Basic usage", new CmdOptions{ Path = "~/path/to/dir" })
+                    new Example("Basic usage", new CmdOptions{ Path = "~/path/to/dir" }),
+                    new Example("Single file", new CmdOptions{ Path = "/path/to/file.ext" }),
+                    new Example("All files", new CmdOptions
+                        {
+                            Path = "~/path/to/dir",
+                            Recursive = true,
+                            NumberOfBytes = 16
+                        })
                 };
             }
         }

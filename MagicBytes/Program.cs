@@ -8,25 +8,11 @@ namespace MagicBytes
 {
     class Program
     {
-        static int Main(string[] args)
+        static void Main(string[] args)
         {
             var options = new CmdOptions();
             var parsed = CommandLine.Parser.Default.ParseArguments<CmdOptions>(args)
-                .WithParsed(o => Console.WriteLine($"{o.Path}, {o.NumberOfBytes}, {o.Recursive}"));
-
-
-            /*
-            var path = args[0];
-            var reader = new BytesReader(8);
-
-            Action<string> fileFunc = (string path) =>
-                Console.WriteLine(reader.ReadBytes(path).ToString());
-
-            var walker = new FileWalker(path, true);
-            walker.Walk(fileFunc);
-            */
-
-            return 0;
+                .WithParsed(o => Setup.RunWithOptions(o));
         }
     }
 }

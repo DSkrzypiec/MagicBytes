@@ -38,6 +38,6 @@ For now result is printed on the standard out in form of `fullPath: [magic bytes
 ## TODO
 
 1. [x] Pass results on the fly (don't accumulate all results in a `List<T>`)
-1. [] Setup a few flags (for recursive traverse, output format, concurrency and so on...)
+1. [x/2] Setup a few flags (for recursive traverse, output format, concurrency and so on...)
 1. [] Write built-in mini help
 1. [x] Test on Windows
