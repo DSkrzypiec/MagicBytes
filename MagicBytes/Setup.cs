@@ -21,7 +21,7 @@ namespace MagicBytes
                 return;
             }
 
-            var fileWalker = new FileWalker(options.Path, options.Recursive);
+            var fileWalker = new FileWalker(options.Path, options.Recursive, options.MaxDepth);
 
             var runner = new Runner(
                 bytesReader,

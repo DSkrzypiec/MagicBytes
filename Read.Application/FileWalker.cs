@@ -15,18 +15,19 @@ namespace Read.Application
     {
         private readonly string _rootDirPath;
         private readonly bool _walkRecursive = false;
+        private readonly int _maxDepth = ushort.MaxValue;
 
         public FileWalker(string rootDirPath)
         {
             _rootDirPath = rootDirPath;
         }
 
-        public FileWalker(string rootDirPath, bool recursively)
+        public FileWalker(string rootDirPath, bool recursively, int maxDepth)
         {
             _rootDirPath = rootDirPath;
             _walkRecursive = recursively;
+            _maxDepth = maxDepth;
         }
-
 
         public void Walk(Action<string> fileFunc)
         {
@@ -43,11 +44,16 @@ namespace Read.Application
 
         private void WalkRecursively(Action<string> fileFunc)
         {
-            WalkRec(_rootDirPath, fileFunc);
+            WalkRec(_rootDirPath, 0, fileFunc);
         }
 
-        private void WalkRec(string dirPath, Action<string> fileFunc)
+        private void WalkRec(string dirPath, int depthLevel, Action<string> fileFunc)
         {
+            if (depthLevel >= _maxDepth || depthLevel == ushort.MaxValue)
+            {
+                return;
+            }
+
             HandleFilesResults(dirPath, fileFunc);
 
             string[] directories = new string[] {};
@@ -63,7 +69,7 @@ namespace Read.Application
 
             foreach (var dir in directories)
             {
-                WalkRec(dir, fileFunc);
+                WalkRec(dir, depthLevel + 1, fileFunc);
             }
         }
 

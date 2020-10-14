@@ -15,6 +15,10 @@ namespace MagicBytes
                 HelpText = "Recursion for sub catalogs")]
         public bool Recursive { get; set; }
 
+        [Option('d',"max_depth", Required = false, Default = ushort.MaxValue,
+                HelpText = "Max depth level for recursion")]
+        public int MaxDepth { get; set; }
+
         [Option('n', "num_bytes", Required = false,
                 HelpText = "Number of first bytes to be read", Default = 8)]
         public int NumberOfBytes { get; set; }

@@ -29,6 +29,14 @@ namespace MagicBytes
 
                 throw new System.ArgumentOutOfRangeException(bytesMsg);
             }
+
+            if (_options.MaxDepth < 0 || _options.MaxDepth > ushort.MaxValue)
+            {
+                var maxDepthMsg = $"Incorrect max depth value [{_options.MaxDepth}]. " +
+                    $"Max depth recursion level should be from interval [0, {ushort.MaxValue}].";
+
+                throw new System.ArgumentOutOfRangeException(maxDepthMsg);
+            }
         }
     }
 }
